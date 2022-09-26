@@ -8,5 +8,13 @@ Component({
             type: Object,
             value: {}
         }
+    },
+    methods: {
+        onVideoItem() {
+            const id = this.properties.itemData.id
+            wx.navigateTo({
+                url: `/pages/detail-video/detail-video?id=${id}`,
+            })
+        }
     }
 })
