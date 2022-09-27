@@ -24,12 +24,7 @@ Page({
         this.fetchMusicBanner()
 
         // 监听recommendSongInfo
-        recommendStore.onState("recommendSongInfo", value => {
-            if (!value.tracks) return
-            this.setData({
-                recommendSongs: value.tracks.slice(0, 6)
-            })
-        })
+        recommendStore.onState("recommendSongInfo", this.handleRecommendSongs)
         // 发起action
         recommendStore.dispatch("fetchRecommendSongsAction")
     },
@@ -64,6 +59,20 @@ Page({
     },
 
     onRecommendMoreClick() {
-        console.log(123);
+        wx.navigateTo({
+            url: '/pages/detail-song/detail-song?type=recommend',
+        })
+    },
+
+    // 从store中获取数据
+    handleRecommendSongs(value) {
+        if (!value.tracks) return
+        this.setData({
+            recommendSongs: value.tracks.slice(0, 6)
+        })
+    },
+
+    onUnload() {
+        recommendStore.offState("recommendSongs", this.handleRecommendSongs)
     }
 })
