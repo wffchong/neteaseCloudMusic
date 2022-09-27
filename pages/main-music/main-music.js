@@ -8,6 +8,7 @@ import {
 import {
     throttle
 } from 'underscore'
+import recommendStore from "../../store/recommendStore"
 
 const querySelectThrottle = throttle(querySelect, 100)
 
@@ -15,11 +16,22 @@ Page({
     data: {
         searchValue: '',
         banners: [],
-        bannerHeight: 150
+        bannerHeight: 150,
+        recommendSongs: []
     },
 
     onLoad() {
         this.fetchMusicBanner()
+
+        // 监听recommendSongInfo
+        recommendStore.onState("recommendSongInfo", value => {
+            if (!value.tracks) return
+            this.setData({
+                recommendSongs: value.tracks.slice(0, 6)
+            })
+        })
+        // 发起action
+        recommendStore.dispatch("fetchRecommendSongsAction")
     },
 
     onSearchClick() {
@@ -35,11 +47,23 @@ Page({
         })
     },
 
+    // async fetchSongMenuList() {
+    //     getSongMenuList().then(res => {
+    //         this.setData({
+    //             hotMenuList: res.playlists
+    //         })
+    //     })
+    // },
+
     onBannerImageLoad() {
         querySelectThrottle(".banner-image").then(res => {
             this.setData({
                 bannerHeight: res[0].height
             })
         })
+    },
+
+    onRecommendMoreClick() {
+        console.log(123);
     }
 })
