@@ -32,3 +32,10 @@ export function getSongMenuList(cat = '全部', limit = 6, offset = 0) {
         }
     })
 }
+
+// 获取所有歌单的tags
+export function getSongMenuTag() {
+    return httpRequest.get({
+        url: "/playlist/hot"
+    })
+}

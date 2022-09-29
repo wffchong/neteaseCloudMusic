@@ -21,5 +21,12 @@ Component({
                 screenWidth: app.globleData.screenWidth
             })
         }
+    },
+    methods: {
+        onMenuMoreClick() {
+            wx.navigateTo({
+                url: '/pages/detail-menu/detail-menu',
+            })
+        }
     }
 })
