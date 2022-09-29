@@ -2,10 +2,14 @@
 import rankingStore from "../../store/rankingStore"
 import recommendStore from "../../store/recommendStore"
 
+import {
+    getPlaylistDetail
+} from '../../services/music'
+
 Page({
     data: {
         type: 'ranking',
-
+        id: '',
         songInfo: {}
     },
     onLoad(options) {
@@ -20,7 +24,20 @@ Page({
         // 根据type从store中获取榜单数据
         if (type === 'recommend') {
             recommendStore.onState('recommendSongInfo', this.handleRanking)
+        } else if (type === 'menu') {
+            const id = options.id
+            this.setData({
+                id
+            })
+            this.fetchMenuSongInfo()
         }
+    },
+
+    async fetchMenuSongInfo() {
+        const res = await getPlaylistDetail(this.data.id)
+        this.setData({
+            songInfo: res.playlist
+        })
     },
 
     handleRanking(value) {
@@ -30,6 +47,6 @@ Page({
         })
         wx.setNavigationBarTitle({
             title: value.name,
-          })
+        })
     }
 })

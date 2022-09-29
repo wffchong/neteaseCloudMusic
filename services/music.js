@@ -11,7 +11,7 @@ export function getMusicBanner(type = 0) {
     })
 }
 
-// 根据不同的id获取不同的榜单数据
+// 根据不同的id获取歌单数据
 export function getPlaylistDetail(id) {
     return httpRequest.get({
         url: "/playlist/detail",
