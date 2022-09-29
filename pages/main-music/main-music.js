@@ -1,6 +1,7 @@
 // pages/main-music/main-music.js
 import {
-    getMusicBanner
+    getMusicBanner,
+    getSongMenuList
 } from '../../services/music'
 import {
     querySelect
@@ -17,11 +18,15 @@ Page({
         searchValue: '',
         banners: [],
         bannerHeight: 150,
-        recommendSongs: []
+        recommendSongs: [],
+        // 歌单数据
+        hotMenuList: [],
+        recMenuList: []
     },
 
     onLoad() {
         this.fetchMusicBanner()
+        this.fetchSongMenuList()
 
         // 监听recommendSongInfo
         recommendStore.onState("recommendSongInfo", this.handleRecommendSongs)
@@ -42,13 +47,22 @@ Page({
         })
     },
 
-    // async fetchSongMenuList() {
-    //     getSongMenuList().then(res => {
-    //         this.setData({
-    //             hotMenuList: res.playlists
-    //         })
-    //     })
-    // },
+    // 获取歌单数据
+    fetchSongMenuList() {
+        // 获取热门歌单
+        getSongMenuList().then(res => {
+            this.setData({
+                hotMenuList: res.playlists
+            })
+        })
+
+        // 获取推荐歌单
+        getSongMenuList("华语").then(res => {
+            this.setData({
+                recMenuList: res.playlists
+            })
+        })
+    },
 
     onBannerImageLoad() {
         querySelectThrottle(".banner-image").then(res => {

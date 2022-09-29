@@ -1,0 +1,10 @@
+<!--components/menu-item/menu-item.wxml-->
+<view class="menu-item">
+    <view class="top">
+        <image class="image" src="{{itemData.coverImgUrl}}" mode="widthFix"></image>
+        <view class="count">{{itemData.playCount}}</view>
+    </view>
+    <view class="bottom">
+        {{itemData.name}}
+    </view>
+</view>
