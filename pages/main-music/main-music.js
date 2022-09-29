@@ -10,7 +10,9 @@ import {
     throttle
 } from 'underscore'
 import recommendStore from "../../store/recommendStore"
-import rankingStore from '../../store/rankingStore'
+import rankingStore, {
+    rankingsMap
+} from '../../store/rankingStore'
 
 const querySelectThrottle = throttle(querySelect, 100)
 
@@ -38,9 +40,9 @@ Page({
         recommendStore.dispatch("fetchRecommendSongsAction")
 
         // 监听巅峰榜的数据
-        rankingStore.onState("newRanking", this.handleNewRanking)
-        rankingStore.onState("originRanking", this.handleOriginRanking)
-        rankingStore.onState("upRanking", this.handleUpRanking)
+        for (const key in rankingsMap) {
+            rankingStore.onState(key, this.handleRanking(key))
+        }
 
         rankingStore.dispatch("fetchRankingDataAction")
     },
@@ -89,46 +91,20 @@ Page({
         })
     },
 
-    handleNewRanking(value) {
-        if (!value.name) return
-        this.setData({
-            isRankingData: true
-        })
-        const newRankingInfos = {
-            ...this.data.rankingInfos,
-            newRanking: value
+    handleRanking(key) {
+        return value => {
+            if (!value.name) return
+            this.setData({
+                isRankingData: true
+            })
+            const newRankingInfos = {
+                ...this.data.rankingInfos,
+                [key]: value
+            }
+            this.setData({
+                rankingInfos: newRankingInfos
+            })
         }
-        this.setData({
-            rankingInfos: newRankingInfos
-        })
-    },
-
-    handleOriginRanking(value) {
-        if (!value.name) return
-        this.setData({
-            isRankingData: true
-        })
-        const newRankingInfos = {
-            ...this.data.rankingInfos,
-            originRanking: value
-        }
-        this.setData({
-            rankingInfos: newRankingInfos
-        })
-    },
-
-    handleUpRanking(value) {
-        if (!value.name) return
-        this.setData({
-            isRankingData: true
-        })
-        const newRankingInfos = {
-            ...this.data.rankingInfos,
-            upRanking: value
-        }
-        this.setData({
-            rankingInfos: newRankingInfos
-        })
     },
 
     // 从store中获取数据
@@ -141,8 +117,9 @@ Page({
 
     onUnload() {
         recommendStore.offState("recommendSongs", this.handleRecommendSongs)
-        rankingStore.offState("newRanking", this.handleNewRanking)
-        rankingStore.offState("originRanking", this.handleOriginRanking)
-        rankingStore.offState("upRanking", this.handleUpRanking)
+
+        for (const key in rankingsMap) {
+            rankingStore.offState(key, this.handleRanking(key))
+        }
     }
 })
