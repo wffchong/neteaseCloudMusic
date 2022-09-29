@@ -10,6 +10,7 @@ import {
     throttle
 } from 'underscore'
 import recommendStore from "../../store/recommendStore"
+import rankingStore from '../../store/rankingStore'
 
 const querySelectThrottle = throttle(querySelect, 100)
 
@@ -21,7 +22,10 @@ Page({
         recommendSongs: [],
         // 歌单数据
         hotMenuList: [],
-        recMenuList: []
+        recMenuList: [],
+        // 巅峰榜
+        rankingInfos: [],
+        isRankingData: false
     },
 
     onLoad() {
@@ -32,6 +36,13 @@ Page({
         recommendStore.onState("recommendSongInfo", this.handleRecommendSongs)
         // 发起action
         recommendStore.dispatch("fetchRecommendSongsAction")
+
+        // 监听巅峰榜的数据
+        rankingStore.onState("newRanking", this.handleNewRanking)
+        rankingStore.onState("originRanking", this.handleOriginRanking)
+        rankingStore.onState("upRanking", this.handleUpRanking)
+
+        rankingStore.dispatch("fetchRankingDataAction")
     },
 
     onSearchClick() {
@@ -78,6 +89,48 @@ Page({
         })
     },
 
+    handleNewRanking(value) {
+        if (!value.name) return
+        this.setData({
+            isRankingData: true
+        })
+        const newRankingInfos = {
+            ...this.data.rankingInfos,
+            newRanking: value
+        }
+        this.setData({
+            rankingInfos: newRankingInfos
+        })
+    },
+
+    handleOriginRanking(value) {
+        if (!value.name) return
+        this.setData({
+            isRankingData: true
+        })
+        const newRankingInfos = {
+            ...this.data.rankingInfos,
+            originRanking: value
+        }
+        this.setData({
+            rankingInfos: newRankingInfos
+        })
+    },
+
+    handleUpRanking(value) {
+        if (!value.name) return
+        this.setData({
+            isRankingData: true
+        })
+        const newRankingInfos = {
+            ...this.data.rankingInfos,
+            upRanking: value
+        }
+        this.setData({
+            rankingInfos: newRankingInfos
+        })
+    },
+
     // 从store中获取数据
     handleRecommendSongs(value) {
         if (!value.tracks) return
@@ -88,5 +141,8 @@ Page({
 
     onUnload() {
         recommendStore.offState("recommendSongs", this.handleRecommendSongs)
+        rankingStore.offState("newRanking", this.handleNewRanking)
+        rankingStore.offState("originRanking", this.handleOriginRanking)
+        rankingStore.offState("upRanking", this.handleUpRanking)
     }
 })

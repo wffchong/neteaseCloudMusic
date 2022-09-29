@@ -12,16 +12,27 @@
 </swiper>
 
 <!-- 推荐歌曲 -->
-<view class="recommend" wx:if="{{recommendSongs.length}}">
+<!-- <view class="recommend" wx:if="{{recommendSongs.length}}">
     <area-header title="推荐歌曲" bind:moreclick="onRecommendMoreClick" />
     <view class="list">
         <block wx:for="{{recommendSongs}}" wx:key="id">
             <song-item-v1 itemData="{{item}}" />
         </block>
     </view>
-</view>
+</view> -->
 
 <!-- 热门歌单 -->
-<menu-area title="热门歌单" menu-list="{{hotMenuList}}"></menu-area>
+<!-- <menu-area title="热门歌单" menu-list="{{hotMenuList}}"></menu-area> -->
 <!-- 推荐歌单 -->
-<menu-area title="推荐歌单" menuList="{{recMenuList}}"/>
+<!-- <menu-area title="推荐歌单" menuList="{{recMenuList}}" /> -->
+
+<!-- 巅峰榜 -->
+<view class="ranking" wx:if="{{isRankingData}}">
+    <area-header title="巅峰榜" hasMore="{{false}}" />
+    <view class="ranking-list">
+        <block wx:for="{{rankingInfos}}" wx:key="id">
+            <!-- 把key传到对应页面，根据key取对应的巅峰榜的更多数据 -->
+            <ranking-item itemData="{{item}}" key="{{index}}" />
+        </block>
+    </view>
+</view>

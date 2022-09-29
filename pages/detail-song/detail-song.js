@@ -10,6 +10,7 @@ Page({
     data: {
         type: 'ranking',
         id: '',
+        key: 'newRanking',
         songInfo: {}
     },
     onLoad(options) {
@@ -30,6 +31,12 @@ Page({
                 id
             })
             this.fetchMenuSongInfo()
+        } else if (type === 'ranking') {
+            const key = options.key
+            this.setData({
+                key
+            })
+            rankingStore.onState(key, this.handleRanking)
         }
     },
 
@@ -41,12 +48,19 @@ Page({
     },
 
     handleRanking(value) {
-        console.log(value);
         this.setData({
             songInfo: value
         })
         wx.setNavigationBarTitle({
             title: value.name,
         })
+    },
+
+    onUnload() {
+        if (this.data.type === "ranking") {
+            rankingStore.offState(this.data.key, this.handleRanking)
+        } else if (this.data.type === "recommend") {
+            recommendStore.offState("recommendSongInfo", this.handleRanking)
+        }
     }
 })

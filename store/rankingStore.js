@@ -6,16 +6,25 @@ import {
     getPlaylistDetail
 } from '../services/music'
 
+const rankingsMap = {
+    newRanking: 3779629,
+    originRanking: 2884035,
+    upRanking: 19723756
+}
+
 const rankingStore = new HYEventStore({
     state: {
-        
+        newRanking: {},
+        originRanking: {},
+        upRanking: {}
     },
     actions: {
         fetchRankingDataAction(ctx) {
-            getPlaylistDetail(3778678).then(res => {
-                // ctx.recommendSongInfo = res.playlist
-                console.log(res);
-            })
+            for (const key in rankingsMap) {
+                getPlaylistDetail(rankingsMap[key]).then(res => {
+                    ctx[key] = res.playlist
+                })
+            }
         }
     }
 })

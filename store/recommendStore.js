@@ -1,10 +1,9 @@
 import {
     HYEventStore
-} from 'hy-event-store'
-
+} from "hy-event-store"
 import {
     getPlaylistDetail
-} from '../services/music'
+} from "../services/music"
 
 const recommendStore = new HYEventStore({
     state: {
