@@ -1,0 +1,9 @@
+<!--components/nav-bar/nav-bar.wxml-->
+<view class="nav-bar">
+    <view class="status" style="height: {{statusHeight}}px"></view>
+    <view class="nav">
+        <view class="left">返回</view>
+        <view class="center">歌曲|歌词</view>
+        <view class="right"></view>
+    </view>
+</view>

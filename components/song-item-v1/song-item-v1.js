@@ -8,7 +8,12 @@ Component({
     },
     methods: {
         onSongItemTap() {
-
+            wx.navigateTo({
+                url: '/pages/music-player/music-player',
+                data: {
+                    id: this.properties.itemData.id
+                }
+            })
         }
     }
 })
